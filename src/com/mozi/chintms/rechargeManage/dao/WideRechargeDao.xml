@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ <mapper namespace="com.mozi.chintms.rechargeManage.dao.WideRechargeDao" > 
+   <!-- 查询 WideRecharge-->
+   <select id="selectWideRechargeList" resultType='com.mozi.chintms.rechargeManage.model.WideRecharge' parameterType="com.mozi.chintms.rechargeManage.model.WideRecharge">
+		<![CDATA[
+			SELECT  
+			        rechargeId,
+					wideNo,
+					amount,
+					cmdProvince,
+				    cmdCity,
+				    cmdPublicService
+					FROM ChintMS.dbo.Recharge WHERE RechargeType='02'
+        ]]>
+        <if test="rechargeId != null">
+           AND   RechargeId =#{rechargeId};
+        </if>
+		<!--  ORDER BY Id DESC  -->
+	</select>
+	 
+	<!-- 插入WideRecharge  -->
+	 <insert id="insertWideRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WideRecharge" >
+		INSERT  INTO ChintMS.dbo.Recharge (RechargeId,WideNo,Amount,CmdProvince,CmdCity,CmdPublicService )
+        VALUES  ( #{rechargeId},#{wideNo}, #{amount},#{cmdProvince},#{cmdCity},#{cmdPublicService});
+	</insert>                                                                        
+	
+	<!--删除WideRecharge -->
+    <delete id="deleteWideRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WideRecharge">
+         DELETE ChintMS.dbo.Recharge
+          WHERE RechargeId IN
+          <foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+            #{item}
+               
+    </foreach>  
+	</delete>
+	
+	<!--更新 WideRecharge-->
+    <update id="updateWideRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WideRecharge">
+	    UPDATE ChintMS.dbo.Recharge SET WideNo=#{wideNo},Amount=#{amount},CmdProvince=#{cmdProvince},CmdCity=#{cmdCity},CmdPublicService=#{cmdPublicService}
+	    WHERE RechargeId=#{rechargeId};
+	</update>
+	
+</mapper>

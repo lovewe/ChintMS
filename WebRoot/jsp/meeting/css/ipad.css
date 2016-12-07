@@ -1,0 +1,212 @@
+html,body{
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	font-family:"Microsoft YaHei";
+	background-color:#f3f3f3;
+	overflow:hidden;
+}
+#console{
+	width:100%;
+	height:2rem;
+	border-top:1px solid #ccc;
+	box-shadow:0 0.1rem 0.1rem #e1e1e1;
+	background-color:#f3f3f3;
+	position:absolute;
+	left:0px;
+	top:0px;
+	overflow:hidden;	
+}
+#console .refresh{
+	width:2.6rem;
+	height:1rem;
+	line-height:1rem;
+	text-align:center;
+	float:right;
+	font-size:0.5rem;
+	color:white;
+	background-color:#fe6800;
+	border-radius:0.5rem;
+	margin:0.5rem;
+}
+#showframe{
+	width:33.6rem;
+	margin:5.1rem 0rem 0rem 0.35rem;
+}
+#showframe .showbox{
+	width:8.3rem;
+	height:4.2rem;
+	border:1px dotted #a0a0a0;
+	border-right:0px none;
+	border-bottom:0px none;
+	float:left;
+	position:relative;
+}
+#showframe .showbox:nth-child(4n){
+	border-right:1px dotted #a0a0a0;	
+}
+#showframe .showbox:nth-child(n+9){
+	border-bottom:1px dotted #a0a0a0;	
+}
+#showframe .showbox .shownum{
+	width:3rem;
+	height:3rem;
+    border:0.1rem solid #d0d0d0;
+    border-radius:2.1rem;
+    box-shadow:0 0 0.1rem 1px #b0b0b0;
+    color:#d0d0d0;
+    font-family:"NSimSun";
+    font-size:2.5rem;
+    line-height:3rem;
+    margin-left:-1.6rem;
+    margin-top:-1.6rem;
+    position:absolute;
+    text-align:center;
+    text-shadow:0 1px 0 #a0a0a0;
+    top:50%;
+    left:50%;
+    z-index:9;
+}
+#list{
+	width:100%;
+	height:4.5rem;
+	border-top:1px solid #ccc;
+	box-shadow:0 -0.1rem 0.1rem #e1e1e1;
+	background-color:#f3f3f3;
+	position:absolute;
+	left:0px;
+	bottom:0px;
+	overflow:hidden;
+}
+#list .listcanvas{
+	width:1000rem;
+	height:4.2rem;
+	overflow:hidden;
+	margin:0.2rem 0rem 0rem 0rem;
+}
+#list .listcanvas .listbox{
+	width:8.3rem;
+	height:4.2rem;
+	float:left;
+	position:relative;
+	margin:0rem 0rem 0rem 0.19rem;
+	background-color:black;
+	overflow:hidden;
+}
+#list .listcanvas .listbox img{
+	width:100%;
+	height:100%;
+}
+#list .listcanvas .listbox span{
+	width:100%;
+	font-size:0.8rem;
+	text-align:center;
+	color:white;
+	position:absolute;
+	bottom:0.1rem;
+	left:0rem;
+	display:inline-block;
+}
+#list .larrow{
+	width:2.4rem;
+	height:3rem;
+	padding:0rem 0rem 0rem 0.6rem;
+	background-color:white;
+	opacity:0.5;
+	font-size:2.2rem;
+	position:absolute;
+	left:0.3rem;
+	bottom:0.75rem;
+	border-radius:1.5rem;
+	z-index:9;
+}
+#list .rarrow{
+	width:2.2rem;
+	height:3rem;
+	padding:0rem 0rem 0rem 0.8rem;
+	background-color:white;
+	opacity:0.7;
+	font-size:2.2rem;
+	position:absolute;
+	right:0.3rem;
+	bottom:0.75rem;
+	border-radius:1.5rem;
+	z-index:9;
+}
+#moveclone,.moveclone{
+
+	width:8.3rem;
+	height:4.2rem;
+	position:absolute;
+	top:0px;
+	left:0px;
+	opacity:0.7;
+}
+#moveclone{
+	display:none;
+}
+#moveclone img,.moveclone img{
+	width:100%;
+	height:100%;
+}
+#moveclone span,.moveclone span{
+	width:100%;
+	font-size:0.8rem;
+	text-align:center;
+	color:white;
+	position:absolute;
+	bottom:0.1rem;
+	left:0rem;
+	display:inline-block;
+}
+iframe{
+	width:calc(100% / 4);
+	height:calc(100% / 3);
+	border:0px none;
+	float:left;
+}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}.clearfix{display:inline-block;}/* Hide from IE Mac */.clearfix {display:block;}/* End hide from IE Mac *//* end of clearfix */
+
+/*
+#showframe{
+	width:33.6rem;
+	height:calc(100% - 200px);
+	margin:8px 0px 0px 8px;
+}
+#showframe .showbox{
+	width:8.3rem;
+	height:6rem;
+	border:2px dotted #a0a0a0;
+	border-right:0px none;
+	border-bottom:0px none;
+	float:left;
+	position:relative;
+}
+#showframe .showbox:nth-child(4n){
+	border-right:2px dotted #a0a0a0;	
+}
+#showframe .showbox:nth-child(n+9){
+	border-bottom:2px dotted #a0a0a0;	
+}
+#showframe .showbox .shownum{
+	width:4rem;
+	height:4rem;
+    border:0.2rem solid #d0d0d0;
+    border-radius:2.2rem;
+    box-shadow:0 0 3px 1px #b0b0b0;
+    color:#d0d0d0;
+    font-family:"NSimSun";
+    font-size:3rem;
+    font-weight:bold;
+    line-height:4rem;
+    margin-left:-2.2rem;
+    margin-top:-2.2rem;
+    position:absolute;
+    text-align:center;
+    text-shadow:0 1px 0 #a0a0a0;
+    top:50%;
+    left:50%;
+    z-index:9;
+}
+*/

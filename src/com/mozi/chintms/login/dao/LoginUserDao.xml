@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mozi.chintms.login.dao.LoginUserDao">
+
+	<!-- 用户登录模块  -->
+	<select id="userLogin" resultType="com.mozi.chintms.login.model.LoginUserInfo"
+		parameterType="com.mozi.chintms.login.model.LoginUserInfo">
+		SELECT 
+		USER_ID,USER_NAME,PASSWORD,STATUS,DEPARTMENT,PHONE
+		FROM USERINFO 
+		WHERE STATUS = 1 
+		<if test="user_name != null" >
+         AND USER_NAME=#{user_name}
+        </if>
+		
+		<if test="user_id != null" >
+         AND USER_ID=#{user_id}
+        </if>
+		
+		<if test="phone != null" >
+         AND PHONE=#{phone}
+        </if>
+	</select>
+	
+	
+</mapper>

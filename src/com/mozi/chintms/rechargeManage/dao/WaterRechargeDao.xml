@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ <mapper namespace="com.mozi.chintms.rechargeManage.dao.WaterRechargeDao" > 
+   <!-- 查询WaterRecharge-->
+   <select id="selectWaterRechargeList" resultType='com.mozi.chintms.rechargeManage.model.WaterRecharge' parameterType="com.mozi.chintms.rechargeManage.model.WaterRecharge">
+		<![CDATA[
+			SELECT  
+			        rechargeId,
+					accountNo,
+					amount,
+					cmdWater,
+					cmdProvince,
+				    cmdCity,
+				    cmdPublicService
+					FROM ChintMS.dbo.Recharge WHERE rechargeType='03'
+        ]]>
+        <if test="rechargeId != null">
+           AND   RechargeId =#{rechargeId};
+        </if>
+		<!--  ORDER BY Id DESC  -->
+	</select>
+	 
+	<!-- 插入WaterRecharge  -->
+	 <insert id="insertWaterRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WaterRecharge" >
+		INSERT  INTO ChintMS.dbo.Recharge (RechargeId,AccountNo,Amount,CmdWater,CmdProvince,CmdCity,CmdPublicService )
+        VALUES  ( #{rechargeId},#{accountNo}, #{amount},#{cmdWater},#{cmdProvince},#{cmdCity},#{cmdPublicService});
+	</insert>                                                                        
+	
+	<!--删除WaterRecharge -->
+    <delete id="deleteWaterRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WaterRecharge">
+         DELETE ChintMS.dbo.Recharge
+          WHERE RechargeId IN
+          <foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+            #{item}
+               
+    </foreach>  
+	</delete>
+	
+	<!--更新WaterRecharge-->
+    <update id="updateWaterRecharge" parameterType="com.mozi.chintms.rechargeManage.model.WaterRecharge">
+	    UPDATE ChintMS.dbo.Recharge SET AccountNo=#{accountNo},Amount=#{amount},CmdWater=#{cmdWater},CmdProvince=#{cmdProvince},CmdCity=#{cmdCity},CmdPublicService=#{cmdPublicService}
+	    WHERE RechargeId=#{rechargeId};
+	</update>
+	
+</mapper>

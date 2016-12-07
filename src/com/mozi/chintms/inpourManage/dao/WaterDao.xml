@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ <mapper namespace="com.mozi.chintms.inpourManage.dao.WaterDao" > 
+	<!-- 插入水煤电缴费  -->
+	 <insert id="insertWater" parameterType="com.mozi.chintms.inpourManage.model.WaterInfo" >
+		INSERT  INTO ChintMS.dbo.Recharge ( RechargeId,AccountNo,Amount,CmdWater,CmdProvince,CmdCity,CmdPublicService,CreatTime,SubAccountType,ChangeType,State,Remark,UserId,Password,RechargeType)
+        VALUES  ( #{rechargeId},#{accountNo}, #{amount},#{cmdWater},#{cmdProvince},#{cmdCity},#{cmdPublicService},#{creatTime},#{subAccountType},#{changeType},#{state},#{remark},#{user_id},#{password},#{rechargeType});
+	</insert>    
+	                                                                    
+</mapper>

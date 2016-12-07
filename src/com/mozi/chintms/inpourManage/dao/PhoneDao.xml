@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.inpourManage.dao.PhoneDao" >
+	<!-- 插入PhoneRecharge  -->
+	<insert id="insertPhone" parameterType="com.mozi.chintms.inpourManage.model.PhoneInfo" >
+		INSERT  INTO ChintMS.dbo.Recharge ( RechargeId,PhoneNo,Amount,Price,CreatTime,SubAccountType,ChangeType,State,Remark,UserId,Password,RechargeType )
+        VALUES  ( #{rechargeId},#{phoneNo}, #{amount},#{price},#{creatTime},#{subAccountType},#{changeType},#{state},#{remark},#{user_id},#{password},#{rechargeType});
+	</insert>
+	  <!--更新 PhoneRecharge-->
+  <!-- <update id="updatePhone1" parameterType="String" >
+	    UPDATE ChintMS.dbo.Recharge SET State='01'
+	    WHERE RechargeId=#{rechargeId,jdbcType=STRING};
+	</update>
+	<update id="updatePhone2" parameterType="String" >
+	    UPDATE ChintMS.dbo.Recharge SET State='02'
+	    WHERE RechargeId=#{rechargeId,jdbcType=STRING};
+	</update>  -->
+</mapper>

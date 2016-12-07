@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcatProjectProperties>
+    <rootDir>/</rootDir>
+    <exportSource>false</exportSource>
+    <reloadable>true</reloadable>
+    <redirectLogger>false</redirectLogger>
+    <updateXml>false</updateXml>
+    <warLocation>C:\Users\Jeffery\Desktop\ChintMS.war</warLocation>
+    <extraInfo></extraInfo>
+    <webPath></webPath>
+</tomcatProjectProperties>

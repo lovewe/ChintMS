@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.transactionManage.dao.TransactionDao">
+  <!-- 获取用户余额 -->
+    <select id="getAmountByID" resultType="com.mozi.chintms.accountManage.model.SubAccountInfo" parameterType="java.lang.String">
+		SELECT USER_ID as personID,Amount,id FROM dbo.SubAccount 
+		WHERE State=1 AND USER_ID=#{_parameter}
+	</select>
+	
+	<!-- 转出流水写入 -->
+	<insert id="insertSubAccountSeq" parameterType="com.mozi.chintms.accountManage.model.SubAccountSeqInfo">
+	 
+	  INSERT INTO dbo.SubAccountSeq
+        ( SN ,
+          SubAccountID ,
+          UserID ,
+          SubAccountType ,
+          Amount ,
+          TransactionAmount ,
+          PreAmount ,
+          SeqFlag ,
+          ChangeType ,
+          OrderID ,
+          Remark ,
+          CreateTime
+        )
+		VALUES  (NEWID(),#{subAccountID},#{userID},#{subAccountType},#{amount},#{tradeAmount},#{preAmount},#{seqFlag},#{changeType},#{orderID},#{tradeRemark},#{createTime})
+	</insert>
+	
+   <!-- 转账 -->
+   <update id="updateAccounts" parameterType="com.mozi.chintms.accountManage.model.SubAccountSeqInfo">
+	  UPDATE  SubAccount SET Amount=#{amount},LastUpdateTime=GETDATE()  WHERE USER_ID=#{userID}
+   </update>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.safeManage.dao.RolePermMapDao" >
+  <resultMap id="BaseResultMap" type="com.mozi.chintms.safeManage.model.RolePermMap" >
+    <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <id column="PERM_ID" property="permId" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ROLE_PERM_MAP
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="java.util.List" >
+    insert into ROLE_PERM_MAP (ROLE_ID, PERM_ID) values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.roleId,jdbcType=VARCHAR}, #{item.permId,jdbcType=VARCHAR})
+    </foreach>  
+  </insert>
+  <insert id="insertSelective" parameterType="com.mozi.chintms.safeManage.model.RolePermMap" >
+    insert into ROLE_PERM_MAP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="permId != null" >
+        PERM_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="permId != null" >
+        #{permId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

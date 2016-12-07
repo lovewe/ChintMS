@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.rechargeManage.dao.PhoneRechargeDao" >
+ <resultMap id="phoneRechargeResultMap" type="com.mozi.chintms.rechargeManage.model.PhoneRecharge" >
+		<id column="RechargeId" property="rechargeId" jdbcType="VARCHAR" />
+		<result column="PhoneNo" property="phoneNo" jdbcType="VARCHAR" />
+		<result column="Amount" property="amount" jdbcType="INTEGER" />
+		<result column="Price" property="price" jdbcType="FLOAT" />
+	</resultMap>
+   <!-- 查询 PhoneRecharge-->
+   <select id="selectPhoneRechargeList" resultType='com.mozi.chintms.rechargeManage.model.PhoneRecharge' parameterType="com.mozi.chintms.rechargeManage.model.PhoneRecharge">
+		<![CDATA[
+	
+			SELECT  
+			        rechargeId,
+					phoneNo,
+					amount,
+					price
+					FROM ChintMS.dbo.Recharge WHERE RechargeType='01'
+        ]]>
+        <if test="rechargeId != null">
+           AND   RechargeId =#{rechargeId};
+        </if>
+		<!--  ORDER BY Id DESC  -->
+	</select>
+	 
+	<!-- 插入PhoneRecharge  -->
+	<insert id="insertPhoneRecharge" parameterType="com.mozi.chintms.rechargeManage.model.PhoneRecharge" >
+		INSERT  INTO ChintMS.dbo.Recharge ( RechargeId,PhoneNo,Amount,Price )
+        VALUES  ( #{rechargeId},#{phoneNo}, #{amount},#{price});
+	</insert>
+	
+	<!--删除PhoneRecharge -->
+    <delete id="deletePhoneRecharge" parameterType="com.mozi.chintms.rechargeManage.model.PhoneRecharge">
+         DELETE ChintMS.dbo.Recharge
+          WHERE  RechargeId IN
+          <foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+            #{item}
+               
+    </foreach>  
+	</delete>
+	
+	<!--更新 PhoneRecharge-->
+    <update id="updatePhoneRecharge" parameterType="com.mozi.chintms.rechargeManage.model.PhoneRecharge">
+	    UPDATE ChintMS.dbo.Recharge SET PhoneNo=#{phoneNo},Amount=#{amount},Price=#{price} 
+	    WHERE RechargeId=#{rechargeId};
+	</update>
+	
+</mapper>

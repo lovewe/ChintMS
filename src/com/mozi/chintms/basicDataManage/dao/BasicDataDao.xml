@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.basicDataManage.dao.BasicDataDao">
+
+	<select id="getProvince" resultType="com.mozi.chintms.basicDataManage.model.RegionInfo" >
+			SELECT  * FROM dbo.Province
+	</select>
+	
+	<select id="getCity" resultType="com.mozi.chintms.basicDataManage.model.RegionInfo" >
+			SELECT  * FROM dbo.City
+	</select>
+	
+	<!-- 
+                 查询自定义唯一键
+     -->
+    <select id="GetUserUniqueKey" parameterMap="GetUserUniqueKey" statementType="CALLABLE">
+        CALL GetUserUniqueKey(?,?,?,?)
+    </select>
+
+    <parameterMap type="java.util.Map" id="GetUserUniqueKey">
+        <parameter property="name" mode="IN" jdbcType="VARCHAR"/>
+         <parameter property="add" mode="IN" jdbcType="VARCHAR"/>
+          <parameter property="trans" mode="IN" jdbcType="VARCHAR"/>
+        <parameter property="billCode" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+	
+</mapper>

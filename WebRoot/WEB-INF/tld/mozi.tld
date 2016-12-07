@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+  <description><![CDATA["To make it easier to access dynamic data;
+                        the MoziLogic includes a library of custom tags."]]></description>
+  <display-name>MoziLogic Tags</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>mozi</short-name>
+  <uri>/WEB-INF/tld/mozi</uri>
+  <tag>
+    <description><![CDATA[Permit the current menu or function of access.]]></description>
+    <name>permit</name>
+    <tag-class>com.mozi.chintbi.taglib.PermitTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description><![CDATA[The current menu or function of id.]]></description>
+      <name>functionId</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>

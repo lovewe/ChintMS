@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.smsManage.dao.PhoneUserDao" >
+
+	<resultMap id="phoneUserResultMap" type="com.mozi.chintms.smsManage.model.PhoneInfo" >
+		<id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="INTEGER" />
+		<result column="PHONE" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="IMGFILEPATH" property="imgFilePath" jdbcType="VARCHAR" />
+	</resultMap>
+
+     <!-- 根据手机号查询是否存在相同-->
+	<select id="selectPhoneUserList" resultMap="phoneUserResultMap"
+		parameterType="com.mozi.chintms.smsManage.model.PhoneInfo">
+		SELECT  USER_ID,USER_NAME,PASSWORD,STATUS,PHONE,IMGFILEPATH FROM dbo.USERINFO WHERE PHONE =#{Phone}
+	</select>
+	
+     <!-- 手机号注册新用户 -->
+	<insert id="insertPhoneUser" parameterType="com.mozi.chintms.smsManage.model.PhoneInfo">
+		INSERT INTO dbo.USERINFO
+        ( USER_ID , USER_NAME ,PASSWORD ,STATUS ,DEPARTMENT ,PHONE ,IMGFILEPATH)
+        VALUES  (#{userId},#{userName},#{password},#{status},#{department},#{phoneNum},#{imgFilePath} )
+	</insert>
+	
+	<!-- 修改及注销信息 -->
+	<update id="updatePhoneUser" parameterType="com.mozi.chintms.smsManage.model.PhoneInfo">
+		UPDATE USERINFO SET USER_NAME=#{userName} ,DEPARTMENT=#{department} ,PASSWORD=#{password},STATUS=#{status},PHONE=#{phoneNum},IMGFILEPATH=#{imgFilePath}
+		WHERE USER_ID=#{userId};
+	</update>
+
+</mapper>

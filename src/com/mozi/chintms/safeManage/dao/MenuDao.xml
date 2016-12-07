@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mozi.chintms.safeManage.dao.MenuDao" >
+
+	<resultMap id="menuResultMap" type="com.mozi.chintms.safeManage.model.Permission" >
+		<id column="PERM_ID" property="permId" jdbcType="VARCHAR" />
+		<result column="PERM_NAME" property="permName" jdbcType="VARCHAR" />
+		<result column="P_PERM_ID" property="pPermId" jdbcType="VARCHAR" />
+		<result column="URL" property="url" jdbcType="VARCHAR" />
+		<result column="MENU_CLASS" property="menuClass" jdbcType="VARCHAR" />
+		<result column="ORDER_NUM" property="orderNum" jdbcType="INTEGER" />
+	</resultMap>
+
+    <select id="getMenuListByUser" resultMap="menuResultMap" parameterType="java.util.Map">
+		SELECT PERMISSION.PERM_ID,PERMISSION.PERM_NAME,PERMISSION.P_PERM_ID,PERMISSION.URL,PERMISSION.MENU_CLASS FROM PERMISSION,ROLE_PERM_MAP,
+		(SELECT USERINFO.USER_NAME,USER_ROLE_MAP.ROLE_ID from USERINFO,USER_ROLE_MAP 
+		WHERE USER_ROLE_MAP.USER_ID = USERINFO.USER_ID ) USER_ROLE
+		WHERE PERMISSION.PERM_ID = ROLE_PERM_MAP.PERM_ID and USER_ROLE.ROLE_ID = ROLE_PERM_MAP.ROLE_ID
+		AND USER_ROLE.USER_NAME = #{userName,jdbcType=VARCHAR}
+		ORDER BY PERMISSION.ORDER_NUM
+	</select>
+	
+	<select id="getMenusByRoleId" resultMap="menuResultMap"  parameterType="java.lang.String">
+		SELECT r.ROLE_ID,r.ROLE_NAME,rp.PERM_ID,p.PERM_NAME FROM dbo.RoleInfo r 
+		INNER JOIN dbo.ROLE_PERM_MAP rp ON rp.ROLE_ID = r.ROLE_ID 
+		INNER JOIN dbo.Permission p ON rp.PERM_ID=p.PERM_ID 
+	    WHERE r.ROLE_ID=#{_parameter}
+	</select>
+
+
+	<select id="selectMenuList" resultMap="menuResultMap"
+		parameterType="com.mozi.chintms.safeManage.model.Permission">
+		SELECT 
+		PERM_ID,PERM_NAME,P_PERM_ID,URL,MENU_CLASS,ORDER_NUM
+		FROM PERMISSION ORDER BY ORDER_NUM
+	</select>
+	
+	
+	<select id="selectMenuById"  parameterType="com.mozi.chintms.safeManage.model.Permission" resultMap="menuResultMap">
+		SELECT 
+		PERM_ID,PERM_NAME,P_PERM_ID,URL,MENU_CLASS,ORDER_NUM,TABLEAU_NAME,TABLEAU_HEIGHT,IS_TABLEAU,IMG_FILE_PATH
+		FROM PERMISSION WHERE PERM_ID=#{permId}
+	</select>
+
+<!-- 新增菜单模块 -->
+	<insert id="insertMenu" parameterType="com.mozi.chintms.safeManage.model.Permission">
+		INSERT INTO PERMISSION (PERM_ID,PERM_NAME,P_PERM_ID,URL,MENU_CLASS,ORDER_NUM)
+		VALUES(#{permId},#{permName},#{pPermId},#{url},#{menuClass},#{orderNum})
+	</insert>
+	
+	<!-- 新增菜单与公司关系 -->
+	<insert id="insertMenuCompany" parameterType="java.util.List">
+		INSERT INTO PERM_COMP_MAP (PERM_ID,COMPANY_ID) VALUES
+	<foreach collection="list" item="item" index="index" separator=",">    
+        <![CDATA[ ( #{permId},#{companyId}) ]]>   
+    </foreach>   
+		
+	</insert>
+	<!-- 根据权限ID删除与公司的关系 -->
+	<delete id="deleteMenuCompany" parameterType="com.mozi.chintms.safeManage.model.Permission">
+		DELETE FROM PERM_COMP_MAP
+		WHERE PERM_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除菜单,包括菜单表、菜单角色表、菜单公司表 -->
+	<delete id="deleteMenu" parameterType="com.mozi.chintms.safeManage.model.Permission">
+		DELETE FROM PERMISSION
+		WHERE PERM_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		;
+		DELETE FROM ROLE_PERM_MAP
+		WHERE PERM_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<update id="updateMenu" parameterType="com.mozi.chintms.safeManage.model.Permission">
+		UPDATE PERMISSION SET PERM_NAME=#{permName} ,P_PERM_ID=#{pPermId} ,	URL =#{url},MENU_CLASS=#{menuClass} ,
+		ORDER_NUM=#{orderNum}
+		
+		WHERE PERM_ID=#{permId}
+	</update>
+
+</mapper>

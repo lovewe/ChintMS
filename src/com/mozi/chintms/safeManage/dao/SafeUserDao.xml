@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mozi.chintms.safeManage.dao.SafeUserDao">
+
+	<resultMap id="userResultMap" type="com.mozi.chintms.safeManage.model.SafeUserInfo" >
+		<id column="USER_ID" property="personID" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="nickname" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="INTEGER" />
+		<result column="DEPARTMENT" property="department" jdbcType="VARCHAR" />
+		<result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+		<result column="province" property="provinceName" jdbcType="VARCHAR" />
+		<result column="City" property="cityName" jdbcType="VARCHAR" />
+		<result column="PHONE" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="sex" property="gender" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="phoneUserResultMap" type="com.mozi.chintms.safeManage.model.SafeUserInfo" >
+		<id column="USER_ID" property="personID" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="nickname" jdbcType="VARCHAR" />
+		<result column="province" property="provinceName" jdbcType="VARCHAR" />
+		<result column="City" property="cityName" jdbcType="VARCHAR" />
+		<result column="PHONE" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="sex" property="gender" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	
+<!-- 新增模块 -->
+	<insert id="insertUser" parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		
+		INSERT INTO USERINFO (USER_ID,USER_NAME,PASSWORD,fullName,province,city,BirthDay ,CertifiType ,CertifiNo ,UserType ,PHONE ,Alias ,Email,STATUS,DEPARTMENT,IMGFILEPATH)
+		VALUES(#{personID},#{nickname},#{password},#{fullname},#{provinceName},#{cityName},#{birthday},#{certifiType} ,#{certifiNo} ,#{userType} ,#{phoneNum} ,#{alias} ,#{email},#{status},#{department},#{imgFilePath});
+		
+		DECLARE @userid nvarchar(50)
+		
+		SELECT TOP 1 @userid =USER_ID FROM dbo.UserInfo ORDER BY CreateTime DESC 
+		INSERT INTO USER_ROLE_MAP (USER_ID,ROLE_ID)
+	    SELECT @userid,ROLE_ID FROM dbo.RoleInfo WHERE ROLE_NAME='普通用户'
+	    
+	    INSERT INTO dbo.SubAccount
+        ( USER_ID  , Amount ,Property ,State , CreateTime ,LastUpdateTime )
+        SELECT  @userid,'10000.00','01',1,GETDATE(),GETDATE()
+	    
+	    
+		<!--
+		INSERT INTO USER_ROLE_MAP (USER_ID,ROLE_ID)
+		VALUES(#{userId},#{roleId});-->
+	</insert>
+
+	<!-- 删除模块 -->
+	<delete id="deleteUser" parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		DELETE FROM USERINFO
+		WHERE USER_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		;
+		DELETE FROM USER_ROLE_MAP
+		WHERE USER_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 查询模块 -->
+	<select id="selectUserList" resultMap="userResultMap"
+		parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		SELECT t1.*,ROLE_NAME from (
+		SELECT USERINFO.USER_ID,USER_NAME,PASSWORD,USERINFO.STATUS,DEPARTMENT,USER_ROLE_MAP.ROLE_ID,PHONE
+		FROM USERINFO
+		LEFT JOIN USER_ROLE_MAP ON USERINFO.USER_ID = USER_ROLE_MAP.USER_ID
+		) t1
+		LEFT JOIN ROLEINFO ON t1.ROLE_ID = ROLEINFO.ROLE_ID
+	</select>
+	
+		<!-- 查询模块 -->
+	<select id="selectUserByID" resultMap="userResultMap"
+		parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		SELECT USER_ID, USER_NAME  ,BirthDay ,CertifiType,FullName,province ,City ,CertifiNo ,UserType ,PHONE ,Alias ,Email ,STATUS ,DEPARTMENT ,IMGFILEPATH,SEX  FROM dbo.UserInfo
+		Where STATUS = 1
+		
+		<if test="userName != null" >
+         AND USER_NAME=#{userName}
+        </if>
+		
+		<if test="phoneNum != null" >
+         AND PHONE=#{phoneNum}
+        </if>
+		
+		<if test="personID != null" >
+         AND User_ID=#{personID}
+        </if>
+	</select>
+	
+			<!-- 查询模块 -->
+	<select id="selectPhoneUserByID" resultMap="phoneUserResultMap"
+		parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		SELECT USER_ID, USER_NAME  ,BirthDay ,FullName,province ,City ,PHONE ,Alias ,IMGFILEPATH,SEX  FROM dbo.UserInfo
+		Where STATUS = 1
+		
+		<if test="userName != null" >
+         AND USER_NAME=#{userName}
+        </if>
+		
+		<if test="phoneNum != null" >
+         AND PHONE=#{phoneNum}
+        </if>
+		
+		<if test="personID != null" >
+         AND User_ID=#{personID}
+        </if>
+	</select>
+	
+	
+		<!-- 更新密码模块 -->
+	<update id="updatePwd" parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		UPDATE USERINFO SET PASSWORD=#{password} 
+		WHERE USER_NAME=#{userName} AND PASSWORD=#{oldPwd};
+	</update>
+	
+		<!-- 更新模块 -->
+	<update id="updateUser" parameterType="com.mozi.chintms.safeManage.model.SafeUserInfo">
+		 UPDATE USERINFO 
+          <trim prefix="set" suffixOverrides=",">
+		  <if test="fullname!=null">FullName =#{fullname},</if>
+		  <if test="nickname!=null">User_Name =#{nickname},</if>
+		  <if test="birthday!=null">BirthDay =#{birthday},</if>
+		  <if test="provinceName!=null">province =#{provinceName},</if>
+		  <if test="cityName!=null">City =#{cityName},</if>
+		  <if test="certifiType!=null"> CertifiType =#{certifiType},</if>
+		  <if test="certifiNo!=null">CertifiNo =#{certifiNo},</if>
+		  <if test="userType!=null">UserType =#{userType},</if>
+		  <if test="alias!=null">Alias =#{alias},</if>
+		  <if test="email!=null">Email =#{email},</if>
+		  <if test="status!=null">Status =#{status},</if>
+		  <if test="imgFilePath!=null">ImgFIlePath =#{imgFilePath},</if>
+		  <if test="department!=null">Department =#{department},</if>
+		  <if test="gender!=null">sex=#{gender},</if>
+		 </trim>
+		  WHERE USER_ID=#{personID}
+		  
+		   <if test="roleId != null and roleId!=''">
+		   UPDATE dbo.USER_ROLE_MAP SET ROLE_ID=#{roleId} WHERE USER_ID= #{personID}
+		   </if>
+
+		<!-- 
+				 
+		 FullName =#{name},  User_Name =#{nickName}, BirthDay =#{birthday}, province =#{provinceName}, City =#{cityName},
+		 CertifiType =#{certifiType}, CertifiNo =#{certifiNo}, UserType =#{userType}, 
+		 Alias =#{alias}, Email =#{email}, Status =#{status}, ImgFIlePath =#{imgFilePath}, Department =#{department},sex=#{gender}
+		 WHERE USER_ID=#{personID};
+		 
+		UPDATE USERINFO SET USER_NAME=#{userName} ,DEPARTMENT=#{department} 
+		WHERE USER_ID=#{userId};
+		
+		DELETE FROM USER_ROLE_MAP
+		WHERE USER_ID=#{userId};
+		INSERT INTO USER_ROLE_MAP (USER_ID,ROLE_ID)
+		VALUES(#{userId},#{roleId});
+		 -->
+	</update>
+	
+		
+</mapper>
